@@ -1,0 +1,123 @@
+<style>
+    #opening h1 {
+      font-size: 50px;
+      margin: 0;
+      animation: fade-in 1s ease-in-out;
+    }
+    #opening p {
+      margin: 10px 0;
+      font-size: 20px;
+    }
+    /* メインの数字表示部分 */
+    #main {
+      flex: 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    #number-display {
+      font-size: 300px; /* サイズは調整可能 */
+      font-weight: bold;
+      color: #FFFFFF; /* 明るい白 */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 軽いシャドウで立体感を演出 */
+      font-family: 'Great Vibes', serif; /* おしゃれなフォントを指定 */
+      animation: fade-in 0.5s ease-in-out;
+    }
+    
+    /* ボタンデザイン */
+    button {
+      background: linear-gradient(to bottom, #d4af37, #b8860b);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 20px;
+      padding: 15px 30px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s ease;
+      margin-top: 20px;
+    }
+    button:hover {
+      background: linear-gradient(to bottom, #ffd700, #d4af37);
+    }
+    
+    /* 履歴表示部分 */
+    #history {
+      flex: 1;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 10px;
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr); /* 5列表示 */
+      gap: 10px;
+      align-content: flex-start;
+      overflow-y: auto;
+    }
+    
+    .history-item {
+      font-size: 24px;
+      background-color: rgba(255, 255, 255, 0.2);
+      text-align: center;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* 数字表示エリアとGIFの基本スタイル */
+    #number-display {
+      font-size: 300px;
+      font-weight: bold;
+      animation: fade-in 0.5s ease-in-out;
+      display: block; /* 初期状態で表示 */
+    }
+    
+    #loading-gif {
+      display: none; /* 初期状態で非表示 */
+    }
+    
+    #manual-input {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    #manual-input input {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 120px;
+    }
+    
+    #manual-input button {
+      background: linear-gradient(to bottom, #d4af37, #b8860b);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    
+    #manual-input button:hover {
+      background: linear-gradient(to bottom, #ffd700, #d4af37);
+    }
+    
+    /* アニメーション */
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+</style>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ビンゴシステム</title>
+    <style>
+      /* オープニング画面 */
+      #opening {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('<?!= openingBackground ?>');
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 30px;
+        text-align: center;
+        cursor: pointer;
+      }
+      /* ビンゴ画面 */
+      #bingo {
+        display: none; /* 初期状態では非表示 */
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: url('<?= backgroundData ?>') no-repeat center center;
+        background-size: cover;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background-image: url('<?!= backgroundData ?>');
+        background-size: cover;
+        color: white;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+        height: 100vh;
+        overflow: hidden;
+      }
+    </style>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <?!= include('style.css'); ?>
+  </head>
+  <body>
+    <!-- オープニング画面 -->
+    <div id="opening" onclick="startBingo()">
+    </div>
+
+    <audio id="background-sound" style="display: none;" controls>
+      <?!= backgroundSound ?>
+    </audio>
+    <div id="main">
+      <!-- GIF表示エリア -->
+      <img id="loading-gif" src="https://furiirakun.com/wp/wp-content/uploads/2022/08/tori.gif" alt="Loading..." style="display: none; width: 150px;">
+
+      <!-- 数字表示エリア -->
+      <div id="number-display">START!!!</div>
+
+      <!-- ボタン -->
+      <button id="next-number-button" onclick="generateNumber()">Let's BINGO!!!</button>
+      
+      <!-- 番号入力欄 -->
+      <div id="manual-input">
+        <input id="manual-number" type="number" placeholder="番号を入力 (1～75)" min="1" max="75" />
+        <button onclick="addManualNumber()">追加</button>
+      </div>
+    </div>
+
+    <div id="history"></div>
+
+   <script>
+      let availableNumbers = Array.from({length: 75}, (_, i) => i + 1);
+      let audio; // 音声オブジェクト
+
+      // オープニング画面からビンゴ画面に遷移
+      function startBingo() {
+        document.getElementById('opening').style.display = 'none';
+        document.getElementById('bingo').style.display = 'flex';
+      }
+
+      function generateNumber() {
+        if (availableNumbers.length === 0) {
+          alert('すべての数字が表示されました！');
+          return;
+        }
+
+        // 音声オブジェクトを作成し、ループ再生を設定
+        var audio = document.getElementById('background-sound');
+        audio.loop = true;
+        audio.play();
+
+        // ローディングGIFを表示
+        const loadingGif = document.getElementById('loading-gif');
+        const numberDisplay = document.getElementById('number-display');
+        const button = document.getElementById('next-number-button');
+        // ボタンを非表示
+        button.style.display = 'none';
+
+        loadingGif.style.display = 'block';
+        numberDisplay.style.display = 'none'; // 数字を一旦非表示
+
+        // 数秒後に番号を表示
+        setTimeout(() => {
+          const randomIndex = Math.floor(Math.random() * availableNumbers.length);
+          const selectedNumber = availableNumbers.splice(randomIndex, 1)[0];
+
+          // 音声を停止
+          audio.pause();
+          audio.currentTime = 0;
+
+          // ローディングGIFを隠し、数字を表示
+          loadingGif.style.display = 'none';
+          numberDisplay.style.display = 'block';
+          numberDisplay.textContent = selectedNumber;
+
+          addToHistory(selectedNumber);
+
+          // ボタンを再表示
+          button.style.display = 'inline-block';
+        }, 1000); // 6秒後に番号を表示
+      }
+
+      // 手動入力で番号を追加
+      function addManualNumber() {
+        const manualNumberInput = document.getElementById('manual-number');
+        const manualNumber = parseInt(manualNumberInput.value, 10);
+
+        // 入力バリデーション
+        if (
+          isNaN(manualNumber) || 
+          manualNumber < 1 || 
+          manualNumber > 75 || 
+          !availableNumbers.includes(manualNumber)
+        ) {
+          alert('1～75の範囲内で、まだ使用されていない番号を入力してください。');
+          return;
+        }
+
+        // 番号を履歴に追加
+        addToHistory(manualNumber);
+
+        // 使用済み番号として扱う
+        availableNumbers = availableNumbers.filter((num) => num !== manualNumber);
+
+        // 入力欄をクリア
+        manualNumberInput.value = '';
+      }
+
+      function addToHistory(number) {
+        const historyContainer = document.getElementById('history');
+        const newItem = document.createElement('div');
+        newItem.className = 'history-item';
+        newItem.textContent = number;
+        historyContainer.appendChild(newItem);
+      }
+    </script>
+  </body>
+</html>
